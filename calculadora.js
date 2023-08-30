@@ -3,6 +3,7 @@ const botonesOperador = document.querySelectorAll(".operador");
 const botonEqual = document.getElementById("equal");
 const botonBorrar = document.getElementById("borrar");
 const botonBorrarTodo = document.getElementById("borrarTodo");
+const botonCambiarSigno = document.getElementById("cambiarSigno");
 
 let valorAnterior = document.getElementById("valorAnterior");
 let valorActual = document.getElementById("valorActual");
@@ -11,38 +12,39 @@ let operador = "";
 let nuevoNumero = false;
 let errorOcurrido = false;
 
-botonesNumero.forEach((boton) => {
-  boton.addEventListener("click", () => {
+botonesNumero.forEach((numeroSeleccionado) => {
+  numeroSeleccionado.addEventListener("click", () => {
     if (nuevoNumero) {
-      valorActual.innerHTML = boton.textContent;
+      valorActual.innerHTML = numeroSeleccionado.textContent;
       nuevoNumero = false;
-    } else if (valorActual.textContent === "No se puede dividir por 0") {
-      valorActual.innerHTML = boton.textContent;
     } else {
-      actualizarValorActual(boton);
+      actualizarValorActual(numeroSeleccionado);
     }
   });
 });
 
-botonesOperador.forEach((boton) => {
-  boton.addEventListener("click", () => {
-    if (errorOcurrido) {
-      return;
-    }
+botonesOperador.forEach((operadorSeleccionado) => {
+  operadorSeleccionado.addEventListener("click", () => {
+    if (errorOcurrido) return;
 
-    operador = boton.value;
+    operador = operadorSeleccionado.value;
 
     if (valorActual.innerHTML !== "") {
-      actualizarValorAnterior(valorActual.textContent, boton.textContent);
+      actualizarValorAnterior(
+        valorActual.textContent,
+        operadorSeleccionado.textContent
+      );
       nuevoNumero = true;
     }
   });
 });
 
+botonCambiarSigno.addEventListener("click", () => {
+  valorActual.innerHTML = -valorActual.textContent;
+});
+
 botonEqual.addEventListener("click", () => {
-  if (errorOcurrido || valorAnterior.innerHTML === "") {
-    return;
-  }
+  if (errorOcurrido || valorAnterior.innerHTML === "") return;
 
   let expresion = valorAnterior.textContent + valorActual.textContent;
   expresion = expresion.replace(/x/g, "*");
@@ -60,7 +62,7 @@ botonEqual.addEventListener("click", () => {
     }
   } catch (error) {
     valorAnterior.innerHTML = null;
-    valorActual.innerHTML = "<h6>No se puede dividir por 0</h6>";
+    valorActual.innerHTML = "<h6>No se puede dividir entre 0</h6>";
     errorOcurrido = true;
   }
 });
@@ -68,8 +70,7 @@ botonEqual.addEventListener("click", () => {
 botonBorrar.addEventListener("click", () => {
   if (errorOcurrido) {
     errorOcurrido = false;
-    valorAnterior.innerHTML = null;
-    valorActual.innerHTML = "0";
+    resetCalculadora();
   }
 
   if (valorActual.textContent.length <= 1) {
@@ -87,8 +88,7 @@ botonBorrarTodo.addEventListener("click", () => {
     errorOcurrido = false;
   }
 
-  valorAnterior.innerHTML = null;
-  valorActual.innerHTML = "0";
+  resetCalculadora();
 });
 
 const calcular = (expresion) => {
@@ -113,4 +113,9 @@ const actualizarValorAnterior = (numero, operador) => {
   } else {
     valorAnterior.innerHTML = valorAnterior.textContent.slice(0, -1) + operador;
   }
+};
+
+const resetCalculadora = () => {
+  valorAnterior.innerHTML = null;
+  valorActual.innerHTML = "0";
 };
