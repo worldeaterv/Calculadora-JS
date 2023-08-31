@@ -5,7 +5,7 @@ const botonEqual = document.getElementById("equal");
 const botonBorrar = document.getElementById("borrar");
 const botonBorrarTodo = document.getElementById("borrarTodo");
 const botonCambiarSigno = document.getElementById("cambiarSigno");
-const botonComa = document.getElementById("coma");
+const botonDecimal = document.getElementById("decimal");
 
 let valorAnterior = document.getElementById("valorAnterior");
 let valorActual = document.getElementById("valorActual");
@@ -79,7 +79,7 @@ botonBorrar.addEventListener("click", () => {
     valorActual.innerHTML = "0";
   }
 
-  // Evitar que borre el unico 0
+  // Evitar que borre el único 0
   if (valorActual.textContent === "0") {
     return;
   }
@@ -95,11 +95,11 @@ botonBorrarTodo.addEventListener("click", () => {
   resetCalculadora();
 });
 
-botonComa.addEventListener("click", () => {
-  if (valorActual.textContent.includes(",")) {
+botonDecimal.addEventListener("click", () => {
+  if (valorActual.textContent.includes(".")) {
     return;
   }
-  valorActual.innerHTML += ",";
+  valorActual.innerHTML += ".";
 });
 
 const calcular = (expresion) => {
