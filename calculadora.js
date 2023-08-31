@@ -1,9 +1,11 @@
 const botonesNumero = document.querySelectorAll(".numero");
 const botonesOperador = document.querySelectorAll(".operador");
+
 const botonEqual = document.getElementById("equal");
 const botonBorrar = document.getElementById("borrar");
 const botonBorrarTodo = document.getElementById("borrarTodo");
 const botonCambiarSigno = document.getElementById("cambiarSigno");
+const botonComa = document.getElementById("coma");
 
 let valorAnterior = document.getElementById("valorAnterior");
 let valorActual = document.getElementById("valorActual");
@@ -76,7 +78,9 @@ botonBorrar.addEventListener("click", () => {
   if (valorActual.textContent.length <= 1) {
     valorActual.innerHTML = "0";
   }
-  if (valorActual.innerHTML.charAt(0) === "0") {
+
+  // Evitar que borre el unico 0
+  if (valorActual.textContent === "0") {
     return;
   }
 
@@ -91,6 +95,13 @@ botonBorrarTodo.addEventListener("click", () => {
   resetCalculadora();
 });
 
+botonComa.addEventListener("click", () => {
+  if (valorActual.textContent.includes(",")) {
+    return;
+  }
+  valorActual.innerHTML += ",";
+});
+
 const calcular = (expresion) => {
   try {
     return Function(`'use strict'; return (${expresion})`)();
@@ -101,10 +112,13 @@ const calcular = (expresion) => {
 };
 
 const actualizarValorActual = (numero) => {
-  valorActual.innerHTML =
-    valorActual.innerHTML.charAt(0) === "0" || valorActual.innerHTML === ""
-      ? numero.textContent
-      : valorActual.innerHTML + numero.textContent;
+  if (valorActual.textContent === "0" && numero.textContent === "0") return;
+
+  if (valorActual.textContent === "0" && numero.textContent != "0") {
+    valorActual.innerHTML = numero.textContent;
+  } else {
+    valorActual.innerHTML += numero.textContent;
+  }
 };
 
 const actualizarValorAnterior = (numero, operador) => {
