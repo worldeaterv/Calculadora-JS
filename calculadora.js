@@ -48,7 +48,12 @@ botonCambiarSigno.addEventListener("click", () => {
 botonEqual.addEventListener("click", () => {
   if (errorOcurrido || valorAnterior.innerHTML === "") return;
 
-  let expresion = valorAnterior.textContent + valorActual.textContent;
+  let expresion = valorAnterior.textContent;
+  if (expresion.endsWith("-") && valorActual.textContent.startsWith("-")) {
+    expresion = expresion.substring(0, expresion.length - 1); 
+  }
+  expresion += valorActual.textContent;
+
   expresion = expresion.replace(/x/g, "*");
 
   try {
@@ -75,16 +80,16 @@ botonBorrar.addEventListener("click", () => {
     resetCalculadora();
   }
 
-  if (valorActual.textContent.length <= 1) {
+  if (valorActual.textContent.length === 2 && valorActual.textContent.startsWith("-")) {
     valorActual.innerHTML = "0";
-  }
-
-  // Evitar que borre el único 0
-  if (valorActual.textContent === "0") {
     return;
   }
 
-  valorActual.innerHTML = valorActual.textContent.slice(0, -1);
+  if (valorActual.textContent.length <= 1) {
+    valorActual.innerHTML = "0";
+  } else {
+    valorActual.innerHTML = valorActual.textContent.slice(0, -1);
+  }
 });
 
 botonBorrarTodo.addEventListener("click", () => {
