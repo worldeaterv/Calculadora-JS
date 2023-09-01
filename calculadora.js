@@ -16,6 +16,7 @@ let errorOcurrido = false;
 
 botonesNumero.forEach((numeroSeleccionado) => {
   numeroSeleccionado.addEventListener("click", () => {
+    if (errorOcurrido) return;
     if (nuevoNumero) {
       valorActual.innerHTML = numeroSeleccionado.textContent;
       nuevoNumero = false;
@@ -42,6 +43,7 @@ botonesOperador.forEach((operadorSeleccionado) => {
 });
 
 botonCambiarSigno.addEventListener("click", () => {
+  if (errorOcurrido) return;
   valorActual.innerHTML = -valorActual.textContent;
 });
 
@@ -50,7 +52,7 @@ botonEqual.addEventListener("click", () => {
 
   let expresion = valorAnterior.textContent;
   if (expresion.endsWith("-") && valorActual.textContent.startsWith("-")) {
-    expresion = expresion.substring(0, expresion.length - 1); 
+    expresion = expresion.substring(0, expresion.length - 1);
   }
   expresion += valorActual.textContent;
 
@@ -68,9 +70,9 @@ botonEqual.addEventListener("click", () => {
       throw new Error("Error de cálculo");
     }
   } catch (error) {
+    errorOcurrido = true;
     valorAnterior.innerHTML = null;
     valorActual.innerHTML = "<h6>No se puede dividir entre 0</h6>";
-    errorOcurrido = true;
   }
 });
 
@@ -80,7 +82,10 @@ botonBorrar.addEventListener("click", () => {
     resetCalculadora();
   }
 
-  if (valorActual.textContent.length === 2 && valorActual.textContent.startsWith("-")) {
+  if (
+    valorActual.textContent.length === 2 &&
+    valorActual.textContent.startsWith("-")
+  ) {
     valorActual.innerHTML = "0";
     return;
   }
